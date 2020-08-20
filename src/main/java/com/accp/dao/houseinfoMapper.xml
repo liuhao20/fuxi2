@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.accp.dao.HouseInfoMapper">
+    <!--<resultMap id="houseInfo" type="com.accp.pojo.HouseInfo">
+        <result property="houseId" column="houseId"/>
+        <result property="houseDesc" column="houseDesc"/>
+        <result property="monthlyRent" column="monthlyRent"/>
+        <result property="publishDate" column="publishDate"/>
+        <collection property="houseType" ofType="com.accp.pojo.HouseType">
+            <result property="typeId" column="typeId"/>
+        </collection>
+    </resultMap>-->
+    <select id="getHouseInfo" resultType="com.accp.pojo.HouseInfo">
+        select i.*,t.typeId,t.typeName from houseinfo i,housetype t
+        where i.typeId=t.typeId
+        order by i.publishDate desc
+        limit #{start},#{end}
+    </select>
+    <select id="typeName" resultType="com.accp.pojo.HouseType">
+        SELECT typeId,typeName FROM housetype
+    </select>
+    <insert id="insert" parameterType="int">
+        insert into
+        <trim prefix="houseinfo(" suffix=")" prefixOverrides=",">
+            <if test="houseDesc!=null and houseDesc!=''">
+                houseDesc,
+            </if>
+            <if test="typeId!=null ">
+                typeId,
+            </if>
+            <if test="monthlyRent!=null ">
+                monthlyRent,
+            </if>
+            <if test="publishDate!=null">
+                publishDate
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" prefixOverrides=",">
+            <if test="houseDesc!=null and houseDesc!=''">
+                #{houseDesc},
+            </if>
+            <if test="typeId!=null ">
+                #{typeId},
+            </if>
+            <if test="monthlyRent!=null ">
+                #{monthlyRent},
+            </if>
+            <if test="publishDate!=null">
+                #{publishDate}
+            </if>
+        </trim>
+    </insert>
+    <select id="findCount" resultType="int">
+        select count(1) from houseinfo
+    </select>
+    <select id="findByTypeId" parameterType="java.lang.Integer" resultType="com.accp.pojo.HouseInfo">
+        select i.*,t.typeId,t.typeName from houseinfo i,housetype t
+        where i.typeId=t.typeId
+        and t.typeId=#{typeId}
+    </select>
+    <!--添加方法-->
+    <!--<insert id="addHouseInfo" parameterType="com.xw.house.pojo.HouseInfo">
+        insert into
+        <trim prefix="houseinfo(" suffix=")" prefixOverrides=",">
+            <if test="houseDesc!=null and houseDesc!=''">
+                houseDesc,
+            </if>
+            <if test="typeId!=null ">
+                typeId,
+            </if>
+            <if test="monthlyRent!=null ">
+                monthlyRent,
+            </if>
+            <if test="publishDate!=null">
+                publishDate
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" prefixOverrides=",">
+            <if test="houseDesc!=null and houseDesc!=''">
+                #{houseDesc},
+            </if>
+            <if test="typeId!=null ">
+                #{typeId},
+            </if>
+            <if test="monthlyRent!=null ">
+                #{monthlyRent},
+            </if>
+            <if test="publishDate!=null">
+                #{publishDate}
+            </if>
+        </trim>
+    </insert>-->
+</mapper> 
